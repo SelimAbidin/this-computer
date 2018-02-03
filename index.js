@@ -1,5 +1,5 @@
 const fs = require('fs')
-const {join} = require('path')
+const {join, normalize} = require('path')
 const os = require('os');
 var spawn = require('child_process').spawn
 
@@ -16,14 +16,16 @@ function listFolder(folder) {
     
     return new Promise( (resolve, reject) => {
 
-        fs.readdir(__dirname, (err, files) => {
+        let normalizedPath = normalize(folder)
+        fs.readdir(normalizedPath, (err, files) => {
 
             if(err) {
                 reject(err)
+                return
             }
 
             let folders = [
-                FolderObject('..', join(folder, '..'))
+                FolderObject('..', normalize(join(normalizedPath, '..')))
             ]
 
             
@@ -72,9 +74,16 @@ function windowsVolumes() {
             data = data.splice(4,data.length - 7)
             data = data.map(Function.prototype.call, String.prototype.trim)
 
+            let folderObjects = []
+
+            for (let i = 0; i < data.length; i++) {
+                const element = data[i]
+                folderObjects.push(FolderObject(element, element))
+            }
+
             var resultObject = {
                 baseFolder : 'This Computer',
-                subFiles : data
+                subFiles : folderObjects
             }
 
             resolve(resultObject)
