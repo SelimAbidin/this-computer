@@ -28,8 +28,9 @@ function listFolder(folder) {
 
             
             for (let i = 0; i < files.length; i++) {
-                let folder = FolderObject(files[i], join(folder, files[i]) )
-                folders.push(folder)
+                let path = join(folder, files[i])
+                let folderObject = FolderObject(files[i], path )
+                folders.push(folderObject)
             }
             
             var resultObject = {

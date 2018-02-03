@@ -1,6 +1,6 @@
 {
   "name": "this-computer",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Folder listing",
   "main": "index.js",
   "author": "Selim Abidin (ysabidin@gmail.com)",
@@ -9,7 +9,7 @@
     "node" : ">=6.12.3" 
   },
   "repository" :
-  { 
+  {
     "type" : "git", 
     "url" : "https://github.com/npm/npm.git"
   },
