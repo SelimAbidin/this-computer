@@ -26,7 +26,8 @@ function listFolder(folder) {
     return new Promise( (resolve, reject) => {
 
         let fpath = folder
-        if(isRootSync(folder)) {
+        let isRoot = isRootSync(folder)
+        if(isRoot) {
             
             if(os.platform() === 'win32') {
                 
@@ -46,10 +47,18 @@ function listFolder(folder) {
                 return
             }
 
-            let folders = [
-                FolderObject('..', normalize(join(normalizedPath, '..')))
-            ]
+            let folders = []
 
+            if(!isRoot) {
+                folders.push(FolderObject('..', normalize(join(normalizedPath, '..'))))
+            } else {
+                
+                if(os.platform() === 'win32') {
+                    folders.push(FolderObject(undefined, 'This Computer'))
+                } else {
+                    folders.push(FolderObject(undefined, 'Root'))
+                }
+            }
             
             for (let i = 0; i < files.length; i++) {
                 let path = join(folder, files[i])
@@ -69,7 +78,7 @@ function listFolder(folder) {
             }
             
             var resultObject = {
-                baseFolder : folder,
+                baseFolder : normalizedPath,
                 subFiles : folders
             }
 
@@ -146,8 +155,7 @@ module.exports = {
 }
 
 // var writeToConsole = param => console.log(param)
-// // // let p = listFolder('D:\\Season 01')
-// let p = listFolder('D:')
+// let p = listFolder('D:\\Archive')
 // if(p instanceof Promise) {
 //     p.then(writeToConsole)
 // }
