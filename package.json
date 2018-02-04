@@ -1,6 +1,6 @@
 {
   "name": "this-computer",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Folder listing",
   "main": "index.js",
   "author": "Selim Abidin (ysabidin@gmail.com)",
