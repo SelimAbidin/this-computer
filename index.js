@@ -1,5 +1,5 @@
-const fs = require('fs')
-const {join, normalize} = require('path')
+const {readdir, lstatSync} = require('fs')
+const {join, normalize, format, parse} = require('path')
 const os = require('os');
 var spawn = require('child_process').spawn
 
@@ -12,12 +12,34 @@ function FolderObject(name, path) {
 }
 
 
+function isFolderSync(source) {
+    return lstatSync(source).isDirectory()
+}
+
+function isRootSync(path) {
+    let parsedPath = parse(path)
+    return parsedPath.root === parsedPath.dir && parsedPath.base.length === 0 && parsedPath.ext.length === 0
+}
+
 function listFolder(folder) {
     
     return new Promise( (resolve, reject) => {
 
-        let normalizedPath = normalize(folder)
-        fs.readdir(normalizedPath, (err, files) => {
+        let fpath = folder
+        if(isRootSync(folder)) {
+            
+            if(os.platform() === 'win32') {
+                
+                if(fpath[fpath.length - 1] === ':') {
+                    fpath += '\\' 
+                }
+            }
+
+        }
+        
+        let normalizedPath = normalize(fpath)
+
+        readdir(normalizedPath, (err, files) => {
 
             if(err) {
                 reject(err)
@@ -31,8 +53,19 @@ function listFolder(folder) {
             
             for (let i = 0; i < files.length; i++) {
                 let path = join(folder, files[i])
-                let folderObject = FolderObject(files[i], path )
-                folders.push(folderObject)
+                
+                let isFolder
+                try {
+                    isFolder = isFolderSync(path)
+                } catch (error) {
+                    console.log('error : isFolderSync');
+                }
+
+                if(isFolder) {
+                    let folderObject = FolderObject(files[i], path )
+                    folders.push(folderObject)
+                }
+                
             }
             
             var resultObject = {
@@ -108,5 +141,13 @@ module.exports = {
     volumes : volumes,
     windowsVolumes : windowsVolumes,
     listPathByRef : listPathByRef,
-    listFolder : listFolder
+    listFolder : listFolder,
+    isRootSync : isRootSync,
 }
+
+// var writeToConsole = param => console.log(param)
+// // // let p = listFolder('D:\\Season 01')
+// let p = listFolder('D:')
+// if(p instanceof Promise) {
+//     p.then(writeToConsole)
+// }

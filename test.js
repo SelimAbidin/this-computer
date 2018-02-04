@@ -1,12 +1,24 @@
 var assert = require('assert');
+var {isRootSync} = require('./index.js') 
 
 
-// describe('findVolumes', function () {
+
+
+describe('isRootSync', function () {
   
-//     it('Lon : 28.8798191, level : 15 Should be 38025', function() {
+    it('C: should be root', function() {
+        let path = 'C:'
+        assert.equal(true, isRootSync(path));
+    });
 
+    it('C:\\ should be root', function() {
+        let path = 'C:\\'
+        assert.equal(true, isRootSync(path));
+    });
 
-//         assert.equal(38025, long2tile(28.8798191, 15));
-//     });
+    it('C:\\test\\ should not be root', function() {
+        let path = 'C:\\test\\'
+        assert.equal(false, isRootSync(path));
+    });
 
-// })
+})
