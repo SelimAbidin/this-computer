@@ -54,9 +54,9 @@ function listFolder(folder) {
             } else {
                 
                 if(os.platform() === 'win32') {
-                    folders.push(FolderObject(undefined, 'This Computer'))
+                    folders.push(FolderObject('This Computer', undefined))
                 } else {
-                    folders.push(FolderObject(undefined, 'Root'))
+                    folders.push(FolderObject('Root', undefined))
                 }
             }
             
