@@ -1,6 +1,8 @@
 # this-computer
 Including volumes, directory listing library
 
+# ATTENTION, this is alpha release. Not tested yet
+
 ```js
 import {volumes, listFolder} from 'this-computer'
 
